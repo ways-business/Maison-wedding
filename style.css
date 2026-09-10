@@ -1,0 +1,1894 @@
+/* =========================================================
+   Maison de la Fork — desktop hero
+   Asset paths expected:
+   assets/hero/hero-bg.webp
+   assets/logo/logo.svg
+   assets/fonts/*.woff2
+   ========================================================= */
+
+/* ---------- Fonts ---------- */
+
+@font-face {
+  font-family: "Dahlia";
+  src: url("./assets/fonts/dahlia-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dahlia";
+  src: url("./assets/fonts/dahlia-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dahlia";
+  src: url("./assets/fonts/dahlia-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KoHo";
+  src: url("./assets/fonts/KoHo-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KoHo";
+  src: url("./assets/fonts/KoHo-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---------- Theme ---------- */
+
+:root {
+  --ink: #355481;
+  --ink-soft: #57709a;
+  --gold: #caa86f;
+  --gold-soft: #d7bd8f;
+  --paper: #f7f3ec;
+  --white: #ffffff;
+
+  /* Deeper, richer gold for solid button fills — distinct from the pale
+     --gold used for hairlines/borders elsewhere on the page. Chosen so
+     white button labels stay comfortably readable (≈5:1 contrast). */
+  --gold-deep: #8a6a3c;
+  --gold-deep-light: #a5824c;
+  --gold-deep-hover: #6e5230;
+  --btn-shadow: rgba(120, 90, 46, 0.38);
+
+  --header-h: 86px;
+  --desktop-canvas: 1920px;
+  --hero-h: 1100px;
+
+  /* Gentle deceleration curve for scroll reveals — quick start, long soft
+     landing, reads as "settling into place" rather than mechanical. */
+  --ease-reveal: cubic-bezier(.16, 1, .3, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1280px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "KoHo", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  height: var(--header-h);
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid var(--gold);
+}
+
+.header-inner {
+  width: 1120px;
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr 190px;
+  align-items: center;
+  column-gap: 30px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+}
+
+.brand img {
+  display: block;
+  width: 180px;
+  height: auto;
+}
+
+.main-nav {
+  height: 58px;
+  justify-self: center;
+  display: flex;
+  align-items: stretch;
+  background:
+    linear-gradient(90deg, rgba(244, 240, 231, 0.50), rgba(255,255,255,0.15));
+  padding: 0 12px;
+}
+
+.main-nav a {
+  position: relative;
+  min-width: 108px;
+  padding: 0 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: #415d84;
+}
+
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: transparent;
+  transform: translateX(-50%);
+}
+
+.main-nav a:hover::after,
+.main-nav a.is-active::after {
+  background: var(--gold);
+}
+
+/* Hamburger button + in-drawer CTA only exist for the mobile nav drawer;
+   hidden here so the desktop header is unaffected, switched on inside the
+   mobile media query below. */
+.nav-toggle {
+  display: none;
+}
+
+.main-nav .nav-talk-btn {
+  display: none;
+}
+
+.talk-btn,
+.hero-cta,
+.contact-form button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--gold-deep);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .32) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(165deg, var(--gold-deep-light) 0%, var(--gold-deep) 55%, var(--gold-deep-hover) 100%);
+  color: var(--white);
+  font-family: "Dahlia", Georgia, serif;
+  letter-spacing: .02em;
+  text-shadow: 0 1px 2px rgba(58, 38, 10, .35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .4),
+    inset 0 -12px 16px -12px rgba(58, 38, 10, .4),
+    0 14px 26px -14px var(--btn-shadow),
+    0 3px 8px -3px rgba(53, 84, 129, .3);
+  transition:
+    background 320ms cubic-bezier(.4, 0, .2, 1),
+    border-color 320ms cubic-bezier(.4, 0, .2, 1),
+    box-shadow 320ms cubic-bezier(.4, 0, .2, 1),
+    transform 320ms cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Diagonal shine sweep — a thin band of light glides across the gold
+   on hover, the cue that reads as "foil" rather than flat paint. */
+.talk-btn::before,
+.hero-cta::before,
+.contact-form button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, .55) 50%, transparent 100%);
+  transform: skewX(-18deg);
+  transition: left 700ms cubic-bezier(.4, 0, .2, 1);
+  pointer-events: none;
+}
+
+.talk-btn {
+  justify-self: end;
+  width: 180px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 18px;
+}
+
+.talk-btn:hover,
+.hero-cta:hover,
+.contact-form button:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .4) 0%, rgba(255, 255, 255, 0) 46%),
+    linear-gradient(165deg, var(--gold-deep) 0%, var(--gold-deep-hover) 62%, #5a4224 100%);
+  border-color: var(--gold-deep-hover);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .5),
+    inset 0 -12px 18px -12px rgba(40, 26, 6, .48),
+    0 24px 40px -16px var(--btn-shadow),
+    0 8px 18px -6px rgba(53, 84, 129, .35);
+  transform: translateY(-3px);
+}
+
+.talk-btn:hover::before,
+.hero-cta:hover::before,
+.contact-form button:hover::before {
+  left: 120%;
+}
+
+.talk-btn:active,
+.hero-cta:active,
+.contact-form button:active {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .3),
+    inset 0 -6px 10px -6px rgba(40, 26, 6, .4),
+    0 8px 16px -10px var(--btn-shadow);
+}
+
+.talk-btn:focus-visible,
+.hero-cta:focus-visible,
+.contact-form button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* .main-nav a sets its own link color with higher specificity than
+   .talk-btn alone, which was turning any talk-btn placed inside the
+   nav (e.g. the mobile drawer CTA) blue instead of white. This wins
+   over that rule everywhere the button appears. */
+.main-nav a.talk-btn {
+  color: var(--white);
+}
+
+.header-talk-btn {
+  font-family: "KoHo", Arial, sans-serif;
+}
+
+/* Arrow reads as a small gold-rimmed medallion rather than a bare glyph —
+   it fills and the whole thing drifts right on hover, like a wax-seal
+   detail nudged open. */
+.arrow {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: rgba(255, 255, 255, .08);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  transition:
+    transform 320ms cubic-bezier(.4, 0, .2, 1),
+    background-color 320ms ease,
+    border-color 320ms ease;
+}
+
+.hero-cta .arrow {
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+}
+
+.talk-btn:hover .arrow,
+.hero-cta:hover .arrow,
+.contact-form button:hover .arrow {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, .22);
+  border-color: rgba(255, 255, 255, .85);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  height: var(--hero-h);
+  overflow: visible;
+  background: var(--paper);
+}
+
+/*
+  This is intentionally a FIXED 1920px desktop composition.
+  The image does not change its width; it stays centered.
+*/
+
+
+/* Soft watercolor transition between Hero and Intro */
+.hero-stage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--desktop-canvas);
+  height: var(--hero-h);
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+.hero-art {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 1920px;
+  height: 1100px;
+  object-fit: contain;
+  object-position: center top;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hero-copy {
+  position: absolute;
+  z-index: 2;
+  top: 258px;
+  left: 404px;
+  width: 515px;
+}
+
+.hero h1 {
+  margin: 0 0 20px;
+  font-family: "Dahlia", Georgia, "Times New Roman", serif;
+  font-size: 78px;
+  line-height: 0.97;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.hero-kicker {
+  margin: 0 0 20px;
+  font-family: "Dahlia", Georgia, "Times New Roman", serif;
+  font-size: 27px;
+  line-height: 1.12;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.hero-description {
+  width: 500px;
+  margin: 0;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.32;
+  font-weight: 500;
+  color: #526b91;
+}
+
+.hero-cta {
+  width: 300px;
+  height: 66px;
+  margin-top: 67px;
+  padding: 0 30px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  font-size: 22px;
+}
+
+.placeholder-section {
+  height: 1px;
+}
+
+/* ---------- Desktop safety tweaks ---------- */
+
+@media (max-width: 1500px) {
+  .header-inner {
+    width: 1080px;
+  }
+}
+
+
+/* ---------- Intro ---------- */
+
+.intro {
+  position: relative;
+  z-index: 2;
+  height: 620px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.intro-art {
+  position: absolute;
+  top: 160px;
+  left: 50%;
+  width: 1920px;
+  height: 360px;
+  transform: translateX(-50%);
+}
+
+.intro-watercolor {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1100px;
+  height: auto;
+  transform: translateX(-50%);
+  opacity: .95;
+}
+
+.intro-star {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  transform: translateX(-50%);
+}
+
+.intro-text {
+  position: absolute;
+  top: 173px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  margin: 0;
+
+  text-align: center;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 500;
+  color: #d1ad79;
+}
+
+.intro-line {
+  position: absolute;
+  top: 210px;
+  height: 1.5px;
+  width: 130px;
+  background: #d6bc8c;
+}
+
+.intro-line-left {
+  left: calc(50% - 320px);
+}
+
+.intro-line-right {
+  left: calc(50% + 200px);
+}
+
+
+/* Seam fix: prevents a visible hard 1–2px cut between Hero and Intro. */
+
+
+
+
+/* ---------- Services ---------- */
+
+.services {
+  position: relative;
+  background: var(--paper);
+  padding: 170px 0 240px;
+}
+
+.services-inner {
+  width: 1240px;
+  margin: 0 auto;
+  transform: translateX(0);
+}
+
+.services-heading h2 {
+  margin: 0;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 400;
+  color: #d7b27c;
+}
+
+.services-heading p {
+  margin: 18px 0 70px;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 20px;
+  color: #58739a;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: stretch;
+}
+
+.service-card {
+  min-height: 560px;
+  padding: 0 22px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(202,168,111,.18);
+}
+
+.service-card:first-child {
+  padding-left: 0;
+}
+
+.service-card:last-child {
+  border-right: 0;
+}
+
+.service-top-line {
+  display: block;
+  width: 42px;
+  height: 1.5px;
+  background: var(--gold-soft);
+  margin-bottom: 25px;
+}
+
+.service-card h3 {
+  margin: 0 0 30px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 27px;
+  line-height: .95;
+  font-weight: 500;
+  color: #5877a1;
+}
+
+.service-card p {
+  margin: 0;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  max-width: 190px;
+  color: #617b9d;
+}
+
+.service-card a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 230px;
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: #8ea1bb;
+  transition: color 220ms ease;
+}
+
+.service-card a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 230px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(202,168,111,.65),
+    rgba(202,168,111,.18)
+  );
+  transition: background 220ms ease;
+}
+
+.service-card a img {
+  width: 12px;
+  height: auto;
+  transition: transform 220ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.service-card a:hover {
+  color: var(--gold-deep);
+}
+
+.service-card a:hover::after {
+  background: var(--gold-deep);
+}
+
+.service-card a:hover img {
+  transform: translateX(5px);
+}
+
+.service-card a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+
+.service-card p + p {
+  margin-top: 14px;
+}
+
+
+/* ---------- Section Divider ---------- */
+.section-divider {
+  width: 100%;
+  height: 36px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.section-divider img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Celebration ---------- */
+
+.celebration {
+  position: relative;
+  min-height: 680px;
+  padding-bottom: 300px;
+  background: var(--paper);
+}
+
+.celebration-inner {
+  position: relative;
+  width: 1240px;
+  min-height: 680px;
+  margin: 0 auto;
+}
+
+.celebration-content {
+  position: absolute;
+  top: 190px;
+  left: 0;
+  width: 620px;
+}
+
+.celebration-brand {
+  margin: 0 0 18px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.celebration h2 {
+  margin: 0 0 60px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 62px;
+  line-height: .95;
+  font-weight: 400;
+  color: #d7b27c;
+}
+
+.celebration-items {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.celebration-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.celebration-item img {
+  width: 34px;
+  height: 34px;
+  margin-top: 2px;
+}
+
+.celebration-item h3 {
+  margin: 0 0 8px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 500;
+  color: #5877a1;
+}
+
+.celebration-item p {
+  margin: 0;
+  max-width: 570px;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #617b9d;
+}
+
+.celebration-cupid {
+  position: absolute;
+  width: 430px;
+  height: auto;
+  right: 20px;
+  top: 270px;
+}
+
+
+/* ---------- Gallery ---------- */
+
+.gallery {
+  position: relative;
+  background: var(--paper);
+  padding: 0;
+}
+
+.gallery-inner {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  overflow: hidden;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 800px;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.gallery-overlay {
+  position: absolute;
+  left: calc(50% - 620px);
+  top: 67%;
+  transform: translateY(-50%);
+  width: 270px;
+  color: #ffffff;
+}
+
+.gallery-overlay h2 {
+  margin: 0 0 18px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 42px;
+  line-height: .95;
+  font-weight: 400;
+}
+
+.gallery-overlay p {
+  margin: 0 0 22px;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.gallery-overlay {
+  z-index: 2;
+}
+
+/* Gallery button — sits over a photo, so it gets a blue-multiply backdrop
+   for legibility and flips to a solid fill on hover for clear feedback. */
+.gallery-overlay a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  width: 205px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 10px;
+  background: rgba(53, 84, 129, 0.22);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: .01em;
+  color: #ffffff;
+  box-shadow: 0 14px 26px -16px rgba(0, 0, 0, .5);
+  transition:
+    background-color 260ms ease,
+    color 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    transform 260ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.gallery-overlay a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(53, 84, 129, 0.55);
+  mix-blend-mode: multiply;
+  z-index: -1;
+}
+
+/* Same diagonal shine cue as the gold buttons, tuned pale-gold so it
+   still reads against the photo instead of just flashing white. */
+.gallery-overlay a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 244, 214, .6) 50%, transparent 100%);
+  transform: skewX(-18deg);
+  transition: left 700ms cubic-bezier(.4, 0, .2, 1);
+  pointer-events: none;
+}
+
+.gallery-overlay a:hover::after {
+  left: 120%;
+}
+
+.gallery-overlay a:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 20px 36px -16px rgba(0, 0, 0, .55);
+  transform: translateY(-3px);
+}
+
+.gallery-overlay a:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+
+/* ---------- Contact + Footer ---------- */
+
+.contact-footer {
+  position: relative;
+  height: 720px;
+  background: var(--paper);
+}
+
+.contact-footer-bg {
+  position: relative;
+  width: 100%;
+  height: 735px;
+  background-image: url("./assets/footer/footer-watercolor.webp");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 1920px 735px;
+}
+
+.contact-inner {
+  position: relative;
+  width: 900px;
+  margin: 0 auto;
+  padding-top: 95px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.contact-copy {
+  width: 360px;
+}
+
+.contact-copy h2 {
+  margin: 0 0 20px;
+  font-family: "Dahlia", Georgia, serif;
+  font-size: 64px;
+  font-weight: 400;
+  color: #5877a1;
+}
+
+.contact-copy p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #617b9d;
+}
+
+.contact-line {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  margin: 25px 0;
+}
+
+.contact-phone {
+  margin-top: 0 !important;
+}
+
+.site-footer {
+  position: absolute;
+  left: 50%;
+  bottom: 25px;
+  transform: translateX(-50%);
+  width: 900px;
+  color: #ffffff;
+}
+
+.footer-cupid {
+  width: 90px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.footer-brand h3 {
+  margin: 0;
+  font-family: "Dahlia", serif;
+  font-size: 20px;
+}
+
+.footer-brand p {
+  margin: 5px 0;
+  font-size: 12px;
+}
+
+.copyright {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 12px;
+}
+
+
+/* ---------- Contact + Footer final alignment fixes ---------- */
+
+.contact-inner {
+  width: 1240px;
+  padding-top: 55px;
+  gap: 170px;
+  justify-content: flex-start;
+}
+
+.contact-copy {
+  width: 360px;
+}
+
+.site-footer {
+  width: 1240px;
+  bottom: 45px;
+}
+
+.footer-cupid {
+  width: 75px;
+  margin-bottom: 15px;
+}
+
+
+
+/* ---------- Contact / Footer separation fix ---------- */
+
+/* Contact stays clean; watercolor starts lower and only overlaps slightly */
+.contact-footer {
+  height: 1235px;
+  background: var(--paper);
+}
+
+.contact-footer-bg {
+  height: 735px;
+  margin-top: 500px;
+  background-position: center top;
+  background-size: 1920px 735px;
+}
+
+/* Move footer content together with the watercolor section */
+.site-footer {
+  bottom: 45px;
+}
+
+/* Keep contact content outside the footer watercolor */
+.contact-inner {
+  position: absolute;
+  top: -445px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/* =========================================================
+   Contact Form
+   ========================================================= */
+
+.contact-form {
+  position: relative;
+  width: 760px;
+  padding: 40px 44px 36px;
+  border: 1px solid rgba(202, 168, 111, .35);
+  border-top: 3px solid var(--gold-deep);
+  background: rgba(255, 255, 255, .55);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 24px 48px -28px rgba(53, 84, 129, .35);
+}
+
+.contact-form label {
+  display: block;
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--ink-soft);
+}
+
+.contact-form > label {
+  margin: 6px 0 12px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(202, 168, 111, .4);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .6);
+  font-family: "KoHo", Arial, sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(87, 112, 154, .55);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--gold-deep);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(138, 106, 60, .14);
+}
+
+.contact-form textarea {
+  height: 96px;
+  resize: none;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 28px;
+  margin-bottom: 22px;
+}
+
+.form-row label {
+  margin: 0;
+}
+
+/* Service checkboxes as tappable chips — each label wraps its input, so
+   :has() lets the whole pill react to the (visually hidden) checkbox
+   state without any change to the HTML. */
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin: 2px 0 22px;
+}
+
+.checks label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 9px 18px;
+  border: 1px solid rgba(202, 168, 111, .5);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .4);
+  font-size: 12px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.checks input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checks label:hover {
+  border-color: var(--gold-deep);
+}
+
+.checks label:has(input:checked) {
+  background: var(--gold-deep);
+  border-color: var(--gold-deep);
+  color: var(--white);
+}
+
+.checks label:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.contact-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 0 34px;
+  height: 48px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+/* ---------- Footer overflow / end-of-page fix ---------- */
+
+.contact-footer {
+  height: 1235px;
+  overflow: hidden;
+}
+
+.contact-footer-bg {
+  position: absolute;
+  left: 0;
+  top: 500px;
+  width: 100%;
+  height: 735px;
+  margin-top: 0;
+  background-position: center top;
+}
+
+.site-footer {
+  bottom: 45px;
+}
+
+
+/* =========================================================
+   Scroll reveal
+   Elements are hidden only once script.js confirms it's running
+   (it flags <html> with .js-reveal) — with JS disabled or broken,
+   every [data-reveal] element stays visible, so nothing is ever
+   permanently lost to a failed animation.
+   ========================================================= */
+
+.js-reveal [data-reveal] {
+  transition:
+    opacity 900ms var(--ease-reveal),
+    transform 900ms var(--ease-reveal);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js-reveal [data-reveal="rise"] {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.js-reveal [data-reveal="rise"].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js-reveal [data-reveal="fade"] {
+  opacity: 0;
+}
+
+.js-reveal [data-reveal="fade"].is-visible {
+  opacity: 1;
+}
+
+.js-reveal [data-reveal="scale"] {
+  opacity: 0;
+  transform: translateY(16px) scale(.96);
+}
+
+.js-reveal [data-reveal="scale"].is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* The intro hairlines draw themselves inward from each side rather than
+   fading, so they read as being "underlined into place". */
+.js-reveal [data-reveal="line-left"],
+.js-reveal [data-reveal="line-right"] {
+  transition: transform 900ms var(--ease-reveal);
+  transition-delay: var(--reveal-delay, 0ms);
+  transform: scaleX(0);
+}
+
+.js-reveal [data-reveal="line-left"] {
+  transform-origin: right center;
+}
+
+.js-reveal [data-reveal="line-right"] {
+  transform-origin: left center;
+}
+
+.js-reveal [data-reveal="line-left"].is-visible,
+.js-reveal [data-reveal="line-right"].is-visible {
+  transform: scaleX(1);
+}
+
+/* These three intro elements are already horizontally centered with
+   left: 50% + transform: translateX(-50%) — the generic reveal rules
+   above would replace that transform outright, so each gets its own
+   rule that keeps the centering and adds the reveal motion on top. */
+.js-reveal .intro-watercolor[data-reveal] {
+  transform: translateX(-50%) translateY(20px) scale(.97);
+}
+
+.js-reveal .intro-watercolor[data-reveal].is-visible {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: .95;
+}
+
+.js-reveal .intro-star[data-reveal] {
+  transform: translateX(-50%) translateY(14px) scale(.8);
+}
+
+.js-reveal .intro-star[data-reveal].is-visible {
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.js-reveal .intro-text[data-reveal] {
+  transform: translateX(-50%) translateY(22px);
+}
+
+.js-reveal .intro-text[data-reveal].is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .js-reveal .intro-watercolor[data-reveal],
+  .js-reveal .intro-star[data-reveal],
+  .js-reveal .intro-text[data-reveal] {
+    transform: translateX(-50%) !important;
+  }
+}
+
+
+/* =========================================================
+   Mobile — responsive composition
+   Below 768px the fixed 1920px desktop canvas is switched off
+   in favor of a stacked, full-bleed mobile layout.
+
+   Two new assets are expected, each 450×750:
+     assets/hero/hero-bg-mobile.webp
+     assets/footer/footer-watercolor-mobile.webp
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  :root {
+    --header-h: 72px;
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Header / mobile nav drawer ---------- */
+
+  .header-inner {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    grid-template-columns: 1fr auto;
+    column-gap: 16px;
+  }
+
+  .brand img {
+    width: 203px;
+    margin-left: 5px;
+
+  }
+
+  .header-talk-btn {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink);
+    transition: transform 280ms cubic-bezier(.4, 0, .2, 1), opacity 200ms ease;
+  }
+
+  body.nav-open .nav-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  body.nav-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  body.nav-open .nav-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .main-nav {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    height: auto;
+    z-index: 25;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 2px;
+    padding: 48px 32px 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .99) 0%, rgba(247, 243, 236, .99) 55%);
+    border-top: 1px solid var(--gold);
+    box-shadow: 0 18px 34px -22px rgba(53, 84, 129, .35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 260ms cubic-bezier(.4, 0, .2, 1), transform 260ms cubic-bezier(.4, 0, .2, 1);
+  }
+
+  body.nav-open .main-nav {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  body.nav-open {
+    overflow: hidden;
+  }
+
+  .main-nav a {
+    position: relative;
+    min-width: auto;
+    width: auto;
+    align-self: flex-end;
+    padding: 13px 2px;
+    font-size: 18px;
+    letter-spacing: .04em;
+    text-align: right;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 320ms ease, transform 320ms ease, color 200ms ease;
+  }
+
+  /* Thin gold hairline under each link (not the CTA), echoing the
+     dividers used elsewhere on the page — a quiet structural cue
+     instead of the desktop nav's small hover dot. */
+  .main-nav a:not(.talk-btn)::after {
+    content: "";
+    left: auto;
+    right: 2px;
+    bottom: 2px;
+    width: 22px;
+    height: 1.5px;
+    background: rgba(202, 168, 111, .55);
+    transform: none;
+  }
+
+  .main-nav a:nth-of-type(4) {
+    padding-bottom: 20px;
+  }
+
+  .main-nav a.is-active {
+    color: var(--gold-deep);
+  }
+
+  .main-nav a.is-active::after {
+    background: var(--gold-deep);
+  }
+
+  /* Staggered reveal on open only — closing fades everything together
+     at the base transition speed, so the drawer disappears cleanly. */
+  body.nav-open .main-nav a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  body.nav-open .main-nav a:nth-child(1) { transition-delay: 70ms; }
+  body.nav-open .main-nav a:nth-child(2) { transition-delay: 120ms; }
+  body.nav-open .main-nav a:nth-child(3) { transition-delay: 170ms; }
+  body.nav-open .main-nav a:nth-child(4) { transition-delay: 220ms; }
+  body.nav-open .main-nav a:nth-child(5) { transition-delay: 270ms; }
+
+  .main-nav .nav-talk-btn {
+    display: inline-flex;
+    align-self: flex-end;
+    width: 190px;
+    height: 54px;
+    margin-top: 44px;
+    font-size: 15px;
+  }
+
+  .main-nav a:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .nav-toggle:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .hero-stage {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    transform: none;
+    background-image: url("./assets/hero/hero-bg-mobile.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+  }
+
+  .hero-art {
+    display: none;
+  }
+
+  .hero-copy {
+    position: absolute;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 160px;
+    width: auto;
+    padding: 0 90px 0 28px;
+    text-align: left;
+  }
+
+  .hero h1 {
+    font-size: clamp(46px, 13vw, 60px);
+    letter-spacing: -0.02em;
+  }
+
+  .hero-kicker {
+    font-size: clamp(18px, 5.2vw, 21px);
+  }
+
+  .hero-description {
+    width: 100%;
+    max-width: 260px;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .hero-cta {
+    width: min(240px, 100%);
+    height: 58px;
+    margin: 40px 0 0;
+    font-size: 17px;
+  }
+
+  /* ---------- Intro ---------- */
+
+  .intro {
+    height: auto;
+    padding: 0 24px 64px;
+  }
+
+  .intro-art {
+    position: relative;
+    top: 0;
+    left: 50%;
+    width: 260px;
+    height: 240px;
+    transform: translateX(-50%);
+  }
+
+  .intro-watercolor {
+    width: 720px;
+  }
+
+  .intro-star {
+    top: 68px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .intro-text {
+    top: 118px;
+    width: 260px;
+    font-size: 24px;
+  }
+
+  .intro-line {
+    display: none;
+  }
+
+  /* ---------- Services ---------- */
+
+  .services {
+    padding: 88px 24px 96px;
+  }
+
+  .services-inner {
+    width: 100%;
+  }
+
+  .services-heading h2 {
+    font-size: clamp(42px, 11vw, 54px);
+margin-left: 20px;
+
+  }
+
+  .services-heading p {
+    margin: 16px 0 56px;
+    font-size: 16px;
+        display: none;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .service-top-line {
+    display: none;
+  }
+
+  .service-card {
+    min-height: auto;
+    padding: 26px 22px 22px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .55);
+    box-shadow: 0 14px 30px -22px rgba(53, 84, 129, .35);
+  }
+
+  .service-card:first-child {
+    padding-left: 22px;
+  }
+
+  .service-card:last-child {
+    border-bottom: none;
+    padding-bottom: 22px;
+  }
+
+  .service-card h3 {
+    margin: 0 0 12px;
+    font-size: 25px;
+  }
+
+  .service-card p {
+    max-width: 100%;
+  }
+
+  .service-card p + p {
+    margin-top: 10px;
+  }
+
+  .service-card a,
+  .service-card a::after {
+    width: 100%;
+  }
+
+  /* ---------- Section divider ---------- */
+
+  .section-divider {
+    height: 22px;
+  }
+
+  /* ---------- Celebration ---------- */
+
+  .celebration {
+    min-height: auto;
+    padding: 72px 24px 64px;
+  }
+
+  .celebration-inner {
+    width: 100%;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .celebration-cupid {
+    position: relative;
+    order: 1;
+    align-self: flex-start;
+    width: 500px;
+    max-width: none;
+    right: auto;
+    top: auto;
+    margin: 0px 0 -185px;
+    transform: translateX(28px);
+  }
+
+  .celebration-content {
+    position: relative;
+    order: 2;
+    top: auto;
+    left: auto;
+    width: 100%;
+    text-align: left;
+  }
+
+  .celebration h2 {
+    margin: 0 0 40px;
+    font-size: 42px;
+  }
+
+  .celebration-item {
+    gap: 10px;
+    text-align: left;
+  }
+
+  .celebration-item p {
+    max-width: 100%;
+  }
+
+  /* ---------- Gallery ---------- */
+
+  .gallery-inner {
+    height: 640px;
+  }
+
+  .gallery-image {
+    height: 640px;
+  }
+
+  .gallery-overlay {
+    left: 24px;
+    right: 24px;
+    top: auto;
+    bottom: 44px;
+    transform: none;
+    width: auto;
+  }
+
+  .gallery-overlay h2 {
+    font-size: 34px;
+  }
+
+  .gallery-overlay a {
+    width: 100%;
+    max-width: 230px;
+  }
+
+  /* ---------- Contact + footer ---------- */
+
+  .contact-footer {
+    height: auto;
+    overflow: visible;
+  }
+
+  .contact-footer-bg {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    margin-top: 0;
+    padding: 64px 0 40px;
+    background-image: url("./assets/footer/footer-watercolor-mobile.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+  }
+
+  .contact-inner {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .contact-copy {
+    width: 100%;
+    text-align: center;
+  }
+
+  .contact-copy h2 {
+    font-size: 46px;
+  }
+
+  .contact-line {
+    margin: 22px auto;
+  }
+
+  .contact-form {
+    width: 100%;
+    padding: 22px 18px 20px;
+  }
+
+  .contact-form > label {
+    margin: 4px 0 6px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    margin-top: 5px;
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .contact-form textarea {
+    height: 64px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    margin-bottom: 10px;
+  }
+
+  .checks {
+    gap: 6px 8px;
+    margin: 2px 0 14px;
+  }
+
+  .checks label {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .contact-form button {
+    height: 44px;
+    margin-top: 2px;
+  }
+
+  .site-footer {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 48px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .footer-cupid {
+    margin: 0 auto 16px;
+  }
+
+  .copyright {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    display: block;
+    margin-top: 18px;
+  }
+}
+
+
+
+/* =========================================================
+   Button redesign — lighter champagne gold, flatter luxury UI
+   ========================================================= */
+:root {
+  --btn-gold: #d9b978;
+  --btn-gold-light: #ebd39d;
+  --btn-gold-border: #c9a464;
+}
+
+.talk-btn,
+.hero-cta,
+.contact-form button {
+  background: linear-gradient(135deg, var(--btn-gold-light) 0%, var(--btn-gold) 100%);
+  border: 1px solid var(--btn-gold-border);
+  border-radius: 999px;
+  box-shadow: none;
+  text-shadow: none;
+  transform: none;
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.talk-btn::before,
+.hero-cta::before,
+.contact-form button::before {
+  display: none;
+}
+
+.talk-btn:hover,
+.hero-cta:hover,
+.contact-form button:hover {
+  background: linear-gradient(135deg, #edd7a5 0%, #d4ad68 100%);
+  border-color: #bd9555;
+  box-shadow: 0 10px 24px -18px rgba(120, 90, 46, .45);
+  transform: translateY(-1px);
+}
+
+.talk-btn:active,
+.hero-cta:active,
+.contact-form button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Header CTA: quiet outlined button instead of filled pill */
+.header-talk-btn {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--gold);
+  box-shadow: none;
+}
+
+.header-talk-btn:hover {
+  background: rgba(202,168,111,.08);
+  border-color: var(--gold-deep);
+  box-shadow: none;
+}
+
+/* Keep arrows minimal — no faux 3D medallion */
+.arrow {
+  background: transparent;
+  border-color: rgba(255,255,255,.65);
+}
+
+.header-talk-btn .arrow {
+  border-color: var(--gold);
+}
